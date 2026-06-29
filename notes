@@ -1,8 +1,8 @@
 // programs are made from objects
-// objects contain the data and perform actions
+// objects contain attributes and methods
 // objects are created from classes
 
-// creates a class called player that inherrets the methods and attributes from the actor(parent) class
+// creates a class called player that inherits the methods and attributes from the actor(parent) class
 // the Actor class has an act(); method in it that the player clas is able to use
 public class Player extends Actor
 {
@@ -12,15 +12,16 @@ public class Player extends Actor
 // a constructor runs when an object is created
 // it makes the object
 Player player1 = new Player();
-class 'name' = new method();
+'classname' 'name' = new 'classname'();
 
 public class Player extends Actor
 {
     // constructor method
-    public new(health, damage)
+    public Player(health, damage)
     {
     // sets the heath of the object to whatever you pass as a paramiter
     this.health = heath;
+    // objects attribute = paramiter;
     }
 }
 
@@ -61,24 +62,25 @@ public int health;
 private int health;
 
 // public method to change health that can be called/used in any object
-public void take_damage()
+public void take_damage(amount)
 {
-    health = health - 10;
+    health = health - amount;
 }
 
 
 // polymorphism: the same method can behave differently depending on the object
 public class Enemy
 {
-    public void attack(bite, shoot)
+    public void attack()
     {
     ...
     }
 }
-bat.attack(100, 0);
-bob.attack(0, 100);
-// bat will use the attack method differently than bob as they are passing in differetn paramiters into the method
-// the bats bite might inflic a poison as the bite paramiter is the one dealing damage, whereas bob might deal more damage as the shoot paramiter could have an effect like that in the method
+bat.attack();
+bob.attack();
+// bat will use the attack method differently than bob
+// the bats bite might inflic a poison status effect, whereas bob might deal x3 damage as the shoot paramiter could have an effect like that in the method
+// the act(); method is another big example
 
 
 // sequencing is the spercific order of instructions
@@ -89,7 +91,7 @@ checkWall(); etc
 
 // selection allows a program to make decisions
 // it uses conditions
-if(checkWall() == ...)
+if(checkWall() == true)
 {
     player.heath = 0;
 }
@@ -102,7 +104,7 @@ switch(level)
         // code if the level is 1
     break;
     default:
-        // code if the level in not 1 or any other case
+        // code if the level is not 1 or any other case
     break;
 }
 
@@ -132,9 +134,9 @@ do
 while(health > 0);
 
 // code inside never stops
-while(True)
+while(true)
 {
 ...
 }
 
-// the act() method of Actor is actually a repleating loop aswell and will repeat every frame
+// the act() method of Actor is automatically a repleating loop aswell and will repeat every frame
