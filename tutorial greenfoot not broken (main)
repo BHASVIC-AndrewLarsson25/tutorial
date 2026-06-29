@@ -1,0 +1,808 @@
+// maze game
+
+// creates a player object that can move around the maze
+public class Player extends Actor
+{
+    public void act()
+    {
+        // checks if the right key is pressed
+        if(Greenfoot.isKeyDown("right"))
+        {
+            // moves the player right
+            setLocation(getX()+3,getY());
+        }
+
+        // checks if the left key is pressed
+        if(Greenfoot.isKeyDown("left"))
+        {
+            // moves the player left
+            setLocation(getX()-3,getY());
+        }
+
+        // checks if the up key is pressed
+        if(Greenfoot.isKeyDown("up"))
+        {
+            // moves the player upwards
+            setLocation(getX(),getY()-3);
+        }
+
+        // checks if the down key is pressed
+        if(Greenfoot.isKeyDown("down"))
+        {
+            // moves the player downwards
+            setLocation(getX(),getY()+3);
+        }
+        // checks if the player hits a wall
+        checkWall();
+    }
+
+    // checks for collisions with walls
+    public void checkWall()
+    {
+        // checks if the player is touching a wall
+        if(isTouching(Wall.class))
+        {
+            // changes the player image when a wall is hit
+            setImage("player-hit.png");
+
+            // moves the player away from the wall
+            move(-5);
+        }
+
+        else
+        {
+            // changes the image back to normal
+            setImage("player.png");
+        }
+    }
+}
+
+// creates a wall object for the maze
+public class Wall extends Actor
+{
+    // walls stay still and don't need movement code
+    public void act()
+    {
+
+    }
+}
+
+// creates the maze game world
+public class MazeWorld extends World
+{
+    // runs when the world is created
+    public MazeWorld()
+    {
+        // creates a world that is 600 pixels wide and 400 pixels high
+        super(600,400,1);
+
+        // creates the player at the starting position
+        addObject(new Player(),100,100);
+
+        // creates walls inside the maze
+        addObject(new Wall(),200,100);
+        addObject(new Wall(),200,200);
+    }
+}
+
+// creates a method for changing images after collisions
+public void checkWall()
+{
+    // checks if the player touches a wall
+    if(isTouching(Wall.class))
+    {
+        // changes the image to show damage
+        setImage("crashed.png");
+    }
+
+    else
+    {
+        // changes the image back when safe
+        setImage("player.png");
+    }
+}
+
+// creates an object that reacts when clicked
+public class Button extends Actor
+{
+    public void act()
+    {
+        // checks if this object was clicked
+        if(Greenfoot.mouseClicked(this))
+        {
+            // prints text to the greenfoot console
+            System.out.println("button clicked");
+        }
+    }
+}
+
+// creates an object that follows the mouse
+public class MouseObject extends Actor
+{
+    public void act()
+    {
+        // gets information about the mouse
+        MouseInfo mouse = Greenfoot.getMouseInfo();
+
+        // checks that the mouse exists
+        if(mouse != null)
+        {
+            // stores the mouse x position
+            int mouseX = mouse.getX();
+
+            // stores the mouse y position
+            int mouseY = mouse.getY();
+
+            // moves the object to the mouse position
+            setLocation(mouseX,mouseY);
+        }
+    }
+}
+
+// creates a player that aims using the mouse
+public class GunPlayer extends Actor
+{
+    public void act()
+    {
+        // gets mouse information
+        MouseInfo mouse = Greenfoot.getMouseInfo();
+
+        // checks that the mouse exists
+        if(mouse != null)
+        {
+            // turns the player towards the mouse
+            turnTowards(
+            mouse.getX(),
+            mouse.getY()
+            );
+        }
+
+        // checks if the mouse is clicked
+        if(Greenfoot.mouseClicked(null))
+        {
+            // creates a bullet
+            shoot();
+        }
+    }
+
+    // creates a shooting method
+    public void shoot()
+    {
+        // creates a new bullet
+        Bullet bullet = new Bullet();
+
+        // adds the bullet into the world
+        getWorld().addObject(
+        bullet,
+        getX(),
+        getY()
+        );
+
+        // makes the bullet travel the same way the player faces
+        bullet.setRotation(getRotation());
+    }
+}
+
+// creates bullets that can hit enemies
+public class Bullet extends Actor
+{
+    public void act()
+    {
+        // moves the bullet forward
+        move(8);
+
+        // checks if the bullet hits an enemy
+        if(isTouching(Enemy.class))
+        {
+            // removes the enemy
+            removeTouching(Enemy.class);
+
+            // removes the bullet
+            getWorld().removeObject(this);
+        }
+    }
+}
+
+// space invaiders
+
+// creates a player spaceship that can move and shoot
+public class Player extends Actor
+{
+    // stores how fast the player moves
+    int speed = 5;
+
+    public void act()
+    {
+        // checks if the left key is pressed
+        if(Greenfoot.isKeyDown("left"))
+        {
+            // moves the spaceship left
+            setLocation(getX()-speed,getY());
+        }
+
+        // checks if the right key is pressed
+        if(Greenfoot.isKeyDown("right"))
+        {
+            // moves the spaceship right
+            setLocation(getX()+speed,getY());
+        }
+
+        // checks if the space key is pressed
+        if(Greenfoot.isKeyDown("space"))
+        {
+            // creates a bullet
+            shoot();
+        }
+    }
+
+    // creates a bullet from the player
+    public void shoot()
+    {
+        // creates a new bullet object
+        Bullet bullet = new Bullet();
+
+        // places the bullet above the player
+        getWorld().addObject(
+        bullet,
+        getX(),
+        getY()-30
+        );
+    }
+}
+
+// creates bullets fired by the player
+public class Bullet extends Actor
+{
+    public void act()
+    {
+        // moves the bullet upwards
+        setLocation(getX(),getY()-6);
+
+        // checks if the bullet touches an enemy
+        if(isTouching(Enemy.class))
+        {
+            // removes the enemy
+            removeTouching(Enemy.class);
+
+            // removes the bullet
+            getWorld().removeObject(this);
+        }
+
+        // checks if the bullet leaves the screen
+        if(getY() <= 0)
+        {
+            // removes the bullet
+            getWorld().removeObject(this);
+        }
+    }
+}
+
+// creates an enemy alien
+public class Enemy extends Actor
+{
+    // stores enemy health
+    int health = 1;
+
+    public void act()
+    {
+        // moves the enemy downwards
+        setLocation(getX(),getY()+2);
+
+        // checks if the enemy reaches the bottom
+        if(getY() > 390)
+        {
+            // removes the enemy
+            getWorld().removeObject(this);
+        }
+    }
+
+    // method for taking damage
+    public void damage()
+    {
+        // reduces enemy health
+        health = health - 1;
+
+        // checks if health is zero
+        if(health <= 0)
+        {
+            // removes enemy
+            getWorld().removeObject(this);
+        }
+    }
+}
+
+// creates the space invader game world
+public class SpaceWorld extends World
+{
+    // runs when the world is created
+    public SpaceWorld()
+    {
+        // creates the game size
+        super(600,400,1);
+
+        // creates the player at the bottom
+        addObject(new Player(),300,350);
+
+        // creates enemy aliens
+        addObject(new Enemy(),100,50);
+        addObject(new Enemy(),200,50);
+        addObject(new Enemy(),300,50);
+        addObject(new Enemy(),400,50);
+    }
+}
+
+// creates a player that can jump and move
+public class Player extends Actor
+{
+    // stores the player's vertical speed
+    int velocity = 0;
+
+    // controls gravity strength
+    int gravity = 1;
+
+    public void act()
+    {
+        // applies gravity
+        velocity = velocity + gravity;
+
+        // moves player vertically
+        setLocation(
+        getX(),
+        getY()+velocity
+        );
+
+        // controls movement
+        movement();
+
+        // checks if player landed on a platform
+        checkPlatform();
+    }
+
+    // controls left, right and jumping
+    public void movement()
+    {
+        // checks if left key is pressed
+        if(Greenfoot.isKeyDown("left"))
+        {
+            // moves player left
+            setLocation(getX()-5,getY());
+        }
+
+        // checks if right key is pressed
+        if(Greenfoot.isKeyDown("right"))
+        {
+            // moves player right
+            setLocation(getX()+5,getY());
+        }
+
+        // checks if space key is pressed
+        if(Greenfoot.isKeyDown("space"))
+        {
+            // makes player jump upwards
+            velocity = -15;
+        }
+    }
+
+    // checks if player touches a platform
+    public void checkPlatform()
+    {
+        // checks for platform collision
+        if(isTouching(Platform.class))
+        {
+            // stops falling
+            velocity = 0;
+
+            // moves player slightly upwards
+            setLocation(getX(),getY()-5);
+        }
+    }
+}
+
+// creates a platform object
+public class Platform extends Actor
+{
+    // platforms don't need movement
+    public void act()
+    {
+
+    }
+}
+
+// creates the platform game world
+public class PlatformWorld extends World
+{
+    // runs when the world starts
+    public PlatformWorld()
+    {
+        // creates the world size
+        super(600,400,1);
+
+        // adds the player
+        addObject(new Player(),100,100);
+
+        // adds platforms
+        addObject(new Platform(),100,300);
+        addObject(new Platform(),300,200);
+        addObject(new Platform(),500,100);
+    }
+}
+
+// asteroids game
+
+// creates a spaceship that can rotate and shoot
+public class Spaceship extends Actor
+{
+    public void act()
+    {
+        // checks if left key is pressed
+        if(Greenfoot.isKeyDown("left"))
+        {
+            // rotates spaceship left
+            turn(-5);
+        }
+
+        // checks if right key is pressed
+        if(Greenfoot.isKeyDown("right"))
+        {
+            // rotates spaceship right
+            turn(5);
+        }
+
+        // checks if up key is pressed
+        if(Greenfoot.isKeyDown("up"))
+        {
+            // moves spaceship forward
+            move(5);
+        }
+
+        // checks if mouse is clicked
+        if(Greenfoot.mouseClicked(null))
+        {
+            // fires a bullet
+            fire();
+        }
+    }
+
+    // creates a bullet
+    public void fire()
+    {
+        // creates a new bullet
+        Bullet bullet = new Bullet();
+
+        // adds bullet to the world
+        getWorld().addObject(
+        bullet,
+        getX(),
+        getY()
+        );
+
+        // makes bullet face the spaceship direction
+        bullet.setRotation(getRotation());
+    }
+}
+
+// creates an asteroid object
+public class Asteroid extends Actor
+{
+    public void act()
+    {
+        // moves asteroid forward
+        move(2);
+
+        // rotates asteroid randomly
+        turn(
+        Greenfoot.getRandomNumber(11)-5
+        );
+
+        // checks if asteroid hits spaceship
+        if(isTouching(Spaceship.class))
+        {
+            // removes asteroid
+            getWorld().removeObject(this);
+        }
+    }
+}
+
+// creates bullets that destroy asteroids
+public class Bullet extends Actor
+{
+    public void act()
+    {
+        // moves bullet forward
+        move(8);
+
+        // checks if bullet hits asteroid
+        if(isTouching(Asteroid.class))
+        {
+            // removes asteroid
+            removeTouching(Asteroid.class);
+
+            // removes bullet
+            getWorld().removeObject(this);
+        }
+    }
+}
+
+// covid game
+
+// creates a person that moves around the simulation
+public class Person extends Actor
+{
+    // stores the movement speed
+    int speed = 2;
+
+    // stores whether the person is infected
+    boolean infected = false;
+
+    public void act()
+    {
+        // moves the person forward
+        move(speed);
+
+        // creates random movement
+        randomMove();
+
+        // checks if the person catches the virus
+        checkInfection();
+
+        // checks if people are too close
+        checkDistance();
+    }
+
+    // creates random movement
+    public void randomMove()
+    {
+        // creates a random turning value
+        int randomTurn = Greenfoot.getRandomNumber(21)-10;
+
+        // turns the person randomly
+        turn(randomTurn);
+    }
+
+    // checks if the person touches an infected person
+    public void checkInfection()
+    {
+        // checks for contact with an infected person
+        if(isTouching(InfectedPerson.class))
+        {
+            // changes the person to infected
+            infected = true;
+
+            // changes the image to show infection
+            setImage("infected.png");
+        }
+    }
+
+    // checks if another person is too close
+    public void checkDistance()
+    {
+        // looks for nearby people
+        Person other =
+        (Person)getOneIntersectingObject(Person.class);
+
+        // checks if another person is found
+        if(other != null)
+        {
+            // moves away to create distance
+            move(-2);
+        }
+    }
+}
+
+// creates a person who starts infected
+public class InfectedPerson extends Actor
+{
+    public void act()
+    {
+        // moves the infected person
+        move(2);
+
+        // changes direction randomly
+        turn(
+        Greenfoot.getRandomNumber(21)-10
+        );
+    }
+}
+
+// creates the covid simulation world
+public class CovidWorld extends World
+{
+    public CovidWorld()
+    {
+        // creates the simulation size
+        super(600,400,1);
+
+        // adds normal people
+        addObject(new Person(),100,100);
+        addObject(new Person(),200,200);
+        addObject(new Person(),300,300);
+
+        // adds an infected person
+        addObject(new InfectedPerson(),400,200);
+    }
+}
+
+// tower defence
+
+// creates an enemy that travels towards the base
+public class Enemy extends Actor
+{
+    // stores enemy health
+    int health = 100;
+
+    public void act()
+    {
+        // moves enemy along the path
+        move(2);
+
+        // checks if enemy is hit by a bullet
+        checkBullet();
+
+        // checks if enemy reaches the base
+        checkBase();
+    }
+
+    // checks for bullet collisions
+    public void checkBullet()
+    {
+        // checks if a bullet touches the enemy
+        if(isTouching(Bullet.class))
+        {
+            // removes some health
+            health = health - 25;
+
+            // removes the bullet
+            removeTouching(Bullet.class);
+
+            // checks if enemy health reaches zero
+            if(health <= 0)
+            {
+                // removes the enemy
+                getWorld().removeObject(this);
+            }
+        }
+    }
+
+    // checks if enemy reaches the base
+    public void checkBase()
+    {
+        // checks if the enemy touches the base
+        if(isTouching(Base.class))
+        {
+            // removes the enemy
+            getWorld().removeObject(this);
+        }
+    }
+}
+
+// creates a tower that shoots enemies
+public class Tower extends Actor
+{
+    // controls how often the tower fires
+    int reload = 0;
+
+    public void act()
+    {
+        // reduces the reload timer
+        reload--;
+
+        // checks if the tower can shoot
+        if(reload <= 0)
+        {
+            // searches for a nearby enemy
+            Enemy enemy =
+            (Enemy)getOneObjectAtOffset(100,0,Enemy.class);
+
+            // checks if an enemy exists
+            if(enemy != null)
+            {
+                // creates a bullet
+                shoot();
+
+                // resets reload time
+                reload = 60;
+            }
+        }
+    }
+
+
+    // creates a bullet
+    public void shoot()
+    {
+        // creates a new bullet object
+        Bullet bullet = new Bullet();
+
+        // adds bullet into the world
+        getWorld().addObject(
+        bullet,
+        getX(),
+        getY()
+        );
+    }
+}
+
+// creates bullets used by towers
+public class Bullet extends Actor
+{
+    public void act()
+    {
+        // moves the bullet forward
+        move(5);
+
+        // checks if the bullet hits an enemy
+        if(isTouching(Enemy.class))
+        {
+            // finds the enemy that was hit
+            Enemy enemy =
+            (Enemy)getOneIntersectingObject(Enemy.class);
+
+            // removes enemy health
+            enemy.health = enemy.health - 25;
+
+            // removes the bullet
+            getWorld().removeObject(this);
+        }
+    }
+}
+
+// creates the base that enemies attack
+public class Base extends Actor
+{
+    // stores the base health
+    int health = 100;
+
+    public void act()
+    {
+        // checks if base health reaches zero
+        if(health <= 0)
+        {
+            // displays game over message
+            System.out.println("game over");
+        }
+    }
+}
+
+// creates the tower defence world
+public class TowerWorld extends World
+{
+    // runs when the world starts
+    public TowerWorld()
+    {
+        // creates the world size
+        super(600,400,1);
+
+        // adds the tower
+        addObject(new Tower(),200,200);
+
+        // adds the base
+        addObject(new Base(),550,200);
+
+        // adds enemies
+        addObject(new Enemy(),50,200);
+    }
+}
+
+// creates a score variable
+public class Score extends Actor
+{
+    // stores the player's score
+    int score = 0;
+
+    // adds points to the score
+    public void addScore(int points)
+    {
+        // increases the score by the amount given
+        score = score + points;
+    }
+
+    // displays the score on screen
+    public void act()
+    {
+        // shows the current score
+        getWorld().showText(
+        "score: " + score,
+        100,
+        50
+        );
+    }
+}
