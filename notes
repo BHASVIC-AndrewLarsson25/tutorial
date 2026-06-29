@@ -1,91 +1,140 @@
-getX();
-// returns the object's x coordinate
+// programs are made from objects
+// objects contain the data and perform actions
+// objects are created from classes
 
-getY();
-// returns the object's y coordinate
-
-setLocation(x,y);
-// moves the object
-
-move(speed);
-// moves forwards
-
-turn(angle);
-// rotates the object
-
-turnTowards(x,y);
-// faces a position
-
-setRotation(angle);
-// sets the direction
-
-getRotation();
-// gets the direction
-
-setImage("image.png");
-// changes the image
-
-isTouching(Class.class);
-// checks for a collision
-
-removeTouching(Class.class);
-// removes the object being touched
-
-getOneIntersectingObject(Class.class);
-// finds one object touching
-
-isAtEdge();
-// checks if at the world's edge
-
-getWorld();
-// gets the current world
-
-addObject(obj,x,y);
-// adds an object to the world
-
-removeObject(this);
-// removes an object from the world
-
-Greenfoot.isKeyDown("space");
-// checks if a key is pressed
-
-Greenfoot.mouseClicked(this);
-// checks if this object was clicked
-
-Greenfoot.mouseClicked(null);
-// checks if the mouse was clicked anywhere
-
-Greenfoot.getMouseInfo();
-// gets the mouse position
-
-Greenfoot.playSound("sound.wav");
-// plays a sound
-
-Greenfoot.stop();
-// stops the game
-
-Greenfoot.delay();
-// pauses the game for x time
-
-Greenfoot.getRandomNumber(10);
-// returns a random number from 0 to 9
-//privatize attributes for better code
-// if statement to make decisions
-if(score > 10)
+// creates a class called player that inherrets the methods and attributes from the actor(parent) class
+// the Actor class has an act(); method in it that the player clas is able to use
+public class Player extends Actor
 {
-    // code runs when condition is true
+...
 }
 
-// methods store reusable code, can be used anywere
-public void jump()
+// a constructor runs when an object is created
+// it makes the object
+Player player1 = new Player();
+class 'name' = new method();
+
+public class Player extends Actor
 {
-    // jumping code goes here
+    // constructor method
+    public new(health, damage)
+    {
+    // sets the heath of the object to whatever you pass as a paramiter
+    this.health = heath;
+    }
 }
 
-// classes create new objects
-public class Enemy extends Actor
+// a class is a blueprint for creating objects
+// it describes what an object has and what it can do
+
+public class Enemy // the name
 {
+    // a variable stored inside the class
+    int health = 100;
+
+    // method stored inside the class that can be used else were as it is public
+    public void attack()
+    {
+    ...
+    }
+}
+// a class can have: attributes, methods and constructors
+
+// an object is an instance of a class
+// it is a usable version of the blueprint, like an actual house
+// they can use attributes and methods e.g. int health = 100; or attack(damage, enemy_health);
+
+// attributes are variables stored inside an object
+// they describe the object's characteristics
+
+// methods are actions an object can perform
+// they contain instructions
+
+
+// encapsulation: keeping data protected inside a class from being accidently modified or deleted
+// other classes access it using public methods
+
+// anyone can change health directly which can cause problems later on and make it very difficult to debug
+public int health;
+
+// this is better
+private int health;
+
+// public method to change health that can be called/used in any object
+public void take_damage()
+{
+    health = health - 10;
 }
 
-// inheritance allows classes to use existing code from other classes
-extends Actor
+
+// polymorphism: the same method can behave differently depending on the object
+public class Enemy
+{
+    public void attack(bite, shoot)
+    {
+    ...
+    }
+}
+bat.attack(100, 0);
+bob.attack(0, 100);
+// bat will use the attack method differently than bob as they are passing in differetn paramiters into the method
+// the bats bite might inflic a poison as the bite paramiter is the one dealing damage, whereas bob might deal more damage as the shoot paramiter could have an effect like that in the method
+
+
+// sequencing is the spercific order of instructions
+// one instruction runs after another
+move(5);
+turn(4);
+checkWall(); etc
+
+// selection allows a program to make decisions
+// it uses conditions
+if(checkWall() == ...)
+{
+    player.heath = 0;
+}
+
+// if, else if, else, switch
+
+switch(level)
+{
+    case 1:
+        // code if the level is 1
+    break;
+    default:
+        // code if the level in not 1 or any other case
+    break;
+}
+
+
+// iteration is the repetition of code while a condition is met
+// it is used when something needs to happen multiple times
+
+// repeats code a set number of times
+for(int i = 0; i < 10; i++)
+{
+    // code repeats 10 times
+}
+// used for creating multiple enemies when you know how many iterations you want
+
+// repeats while a condition is true
+while(health > 0)
+{
+    // game continues
+}
+// used when you don't know how many iterations you want
+
+// runs once before checking the condition
+do
+{
+    // code runs
+}
+while(health > 0);
+
+// code inside never stops
+while(True)
+{
+...
+}
+
+// the act() method of Actor is actually a repleating loop aswell and will repeat every frame
