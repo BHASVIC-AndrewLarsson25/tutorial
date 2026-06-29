@@ -1,0 +1,91 @@
+getX();
+// returns the object's x coordinate
+
+getY();
+// returns the object's y coordinate
+
+setLocation(x,y);
+// moves the object
+
+move(speed);
+// moves forwards
+
+turn(angle);
+// rotates the object
+
+turnTowards(x,y);
+// faces a position
+
+setRotation(angle);
+// sets the direction
+
+getRotation();
+// gets the direction
+
+setImage("image.png");
+// changes the image
+
+isTouching(Class.class);
+// checks for a collision
+
+removeTouching(Class.class);
+// removes the object being touched
+
+getOneIntersectingObject(Class.class);
+// finds one object touching
+
+isAtEdge();
+// checks if at the world's edge
+
+getWorld();
+// gets the current world
+
+addObject(obj,x,y);
+// adds an object to the world
+
+removeObject(this);
+// removes an object from the world
+
+Greenfoot.isKeyDown("space");
+// checks if a key is pressed
+
+Greenfoot.mouseClicked(this);
+// checks if this object was clicked
+
+Greenfoot.mouseClicked(null);
+// checks if the mouse was clicked anywhere
+
+Greenfoot.getMouseInfo();
+// gets the mouse position
+
+Greenfoot.playSound("sound.wav");
+// plays a sound
+
+Greenfoot.stop();
+// stops the game
+
+Greenfoot.delay();
+// pauses the game for x time
+
+Greenfoot.getRandomNumber(10);
+// returns a random number from 0 to 9
+//privatize attributes for better code
+// if statement to make decisions
+if(score > 10)
+{
+    // code runs when condition is true
+}
+
+// methods store reusable code, can be used anywere
+public void jump()
+{
+    // jumping code goes here
+}
+
+// classes create new objects
+public class Enemy extends Actor
+{
+}
+
+// inheritance allows classes to use existing code from other classes
+extends Actor
