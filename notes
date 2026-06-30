@@ -27,7 +27,6 @@ public class Player extends Actor
 
 // a class is a blueprint for creating objects
 // it describes what an object has and what it can do
-
 public class Enemy // the name
 {
     // a variable stored inside the class
